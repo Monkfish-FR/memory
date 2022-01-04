@@ -1,2 +1,3 @@
-// import './app.scss';
+import './scss/main.scss';
+
 console.log('WELCOME to main.js!');

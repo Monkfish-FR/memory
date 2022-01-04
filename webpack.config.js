@@ -5,7 +5,8 @@ module.exports = {
   mode: 'development',
   devtool: 'source-map',
   context: path.resolve(__dirname, 'src'),
-  entry: ['./main.js', './scss/main.scss'],
+  // entry: ['./main.js', './scss/main.scss'],
+  entry: './main.js',
   output: {
     path: path.resolve(__dirname, 'public'),
   },
