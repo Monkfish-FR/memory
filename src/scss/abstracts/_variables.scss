@@ -1,0 +1,26 @@
+@use "functions" as fn;
+
+// Breakpoints
+$bp-large: 1024px;
+
+// Colors
+$default: #2f2d2e;
+$primary: #048ba8;
+$secondary: #fa0;
+$success: #04a821;
+$warning: #fa0;
+$error: #ff2a00;
+
+$white: #fff;
+$black: #000;
+$grey: #666;
+$light: #ccc;
+$lighter: #f6f6f6;
+
+// Fonts
+$font-serif: "Playfair Display", Georgia, serif;
+$font-sans: "Source Sans Pro", Arial, sans-serif;
+$font-code: "Source Code Pro", monospace;
+
+// Others
+$footer-height: fn.add-line(2);

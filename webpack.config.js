@@ -5,7 +5,7 @@ module.exports = {
   mode: 'development',
   devtool: 'source-map',
   context: path.resolve(__dirname, 'src'),
-  entry: ['./main.js', './main.scss'],
+  entry: ['./main.js', './scss/main.scss'],
   output: {
     path: path.resolve(__dirname, 'public'),
   },
@@ -20,12 +20,19 @@ module.exports = {
         loader: 'babel-loader',
       },
       {
-        test: /\.(sa|sc|c)ss$/i,
+        test: /\.s[ac]ss$/i,
         use: [
           MiniCssExtractPlugin.loader,
           'css-loader',
           'sass-loader',
         ],
+      },
+      {
+        test: /\.(woff(2)?|ttf|eot)(\?v=\d+\.\d+\.\d+)?$/,
+        type: 'asset/resource',
+        generator: {
+          filename: './fonts/[name][ext]',
+        },
       },
     ],
   },
