@@ -24,6 +24,7 @@ export default class Memory {
     const { rows, cols, wrapper } = options;
 
     this.wrapper = wrapper;
+    this.board = null;
 
     this.rows = rows;
     // On s'assure que le nombre de cases est pair
@@ -56,15 +57,15 @@ export default class Memory {
    * Initialise le jeu
    */
   init() {
-    const board = Memory.buildBoard();
+    this.board = Memory.buildBoard();
     const squareWidth = 100 / this.cols;
 
     this.deck.forEach((card) => {
       const square = this.buildSquare(squareWidth, card);
-      board.append(square);
+      this.board.append(square);
     });
 
-    this.wrapper.appendChild(board);
+    this.wrapper.appendChild(this.board);
   }
 
   /**
@@ -135,6 +136,7 @@ export default class Memory {
       if (
         !e.target.classList.contains('card--clicked')
         && !e.target.classList.contains('card--found')
+        && !this.board.classList.contains('disabled')
       ) {
         // …on la traite
         this.clickCard(e.target);
@@ -148,11 +150,9 @@ export default class Memory {
    * Sélectionne la carte
    *
    * @param {HTMLDivElement} card La carte sélectionnée
-   * @TODO: si 1ère ou 2ème carte
-   * @TODO: si 2ème carte et bonne ou mauvaise
    */
   clickCard(card) {
-    console.log(153, card.dataset.name);
+    // this.checkVictory(true); // TODO: remove this line
     card.classList.add('card--clicked');
 
     // Si c'est la 1ère carte…
@@ -161,6 +161,9 @@ export default class Memory {
       this.firstCard = card;
     } else {
       // C'est la seconde carte retournée…
+      // …on bloque les prochains clics
+      this.board.classList.add('disabled');
+
       if (card.dataset.name === this.firstCard.dataset.name) {
         // …la paire est trouvée
         this.foundPairs += 1;
@@ -174,6 +177,9 @@ export default class Memory {
         const first = this.firstCard;
 
         setTimeout(() => {
+          // on "réactive" le jeu
+          this.board.classList.remove('disabled');
+
           first.classList.remove('card--clicked');
           card.classList.remove('card--clicked');
         }, 1500);
@@ -185,10 +191,21 @@ export default class Memory {
 
   /**
    * Détermine si c'est gagné
+   *
+   * @param {Boolean} [force=false] Force la victoire ?
    */
-  checkVictory() {
-    if (this.foundPairs === this.nbPairs) {
-      console.log(190, 'YES');
+  checkVictory(force = false) {
+    if (force || this.foundPairs === this.nbPairs) {
+      const modal = document.getElementById('win');
+      modal.classList.add('modal--win');
+
+      modal.addEventListener('click', () => {
+        modal.classList.add('modal--out');
+
+        setTimeout(() => {
+          modal.classList.remove('modal--win', 'modal--out');
+        }, 500);
+      });
     }
   }
 
