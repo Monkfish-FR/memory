@@ -1,22 +1,76 @@
 const CARDS_SAMPLE = [
-  'apple',
-  'banana',
-  'orange',
-  'lime',
-  'pomegranate',
-  'apricot',
-  'lemon',
-  'strawberry',
-  'greenapple',
-  'peach',
-  'grape',
-  'watermelon',
-  'plum',
-  'peer',
-  'cherry',
-  'raspberry',
-  'mango',
-  'yellowcherry',
+  {
+    name: 'apple',
+    index: 0,
+  },
+  {
+    name: 'banana',
+    index: 1,
+  },
+  {
+    name: 'orange',
+    index: 2,
+  },
+  {
+    name: 'lime',
+    index: 3,
+  },
+  {
+    name: 'pomegranate',
+    index: 4,
+  },
+  {
+    name: 'apricot',
+    index: 5,
+  },
+  {
+    name: 'lemon',
+    index: 6,
+  },
+  {
+    name: 'strawberry',
+    index: 7,
+  },
+  {
+    name: 'greenapple',
+    index: 8,
+  },
+  {
+    name: 'peach',
+    index: 9,
+  },
+  {
+    name: 'grape',
+    index: 10,
+  },
+  {
+    name: 'watermelon',
+    index: 11,
+  },
+  {
+    name: 'plum',
+    index: 12,
+  },
+  {
+    name: 'peer',
+    index: 13,
+  },
+  {
+    name: 'cherry',
+    index: 14,
+  },
+  {
+    name: 'raspberry',
+    index: 15,
+  },
+  {
+    name: 'mango',
+    index: 16,
+  },
+  {
+    name: 'yellowcherry',
+    index: 17,
+  },
 ];
 
 export default class Memory {
@@ -60,8 +114,8 @@ export default class Memory {
     this.board = Memory.buildBoard();
     const squareWidth = 100 / this.cols;
 
-    this.deck.forEach((card) => {
-      const square = this.buildSquare(squareWidth, card);
+    this.deck.forEach(({ name, index }) => {
+      const square = this.buildSquare(squareWidth, name, index);
       this.board.append(square);
     });
 
@@ -85,20 +139,21 @@ export default class Memory {
    * Crée une case
    *
    * @param {Number} width La largeur de la case en pourcentage (sans l'unité)
-   * @param {string} cardName Le numéro de la case
+   * @param {string} cardName Le numéro de la carte
+   * @param {Number} index L'index de la carte
    *
    * @returns {HTMLDivElement}
    */
-  buildSquare(width, cardName) {
+  buildSquare(width, cardName, index) {
     const square = document.createElement('div');
-    square.classList.add(['game__square']);
+    square.classList.add('game__square');
     square.style.paddingBottom = `${width}%`;
     square.style.width = `${width}%`;
 
     const squareContent = document.createElement('div');
-    squareContent.classList.add(['game__square__content']);
+    squareContent.classList.add('game__square__content');
 
-    const card = this.buildCard(cardName);
+    const card = this.buildCard(cardName, index);
 
     squareContent.appendChild(card);
     square.appendChild(squareContent);
@@ -110,23 +165,23 @@ export default class Memory {
    * Crée une carte
    *
    * @param {string} cardName Le nom de la carte
+   * @param {Number} index L'index de la carte
    *
    * @returns {HTMLDivElement}
    */
-  buildCard(cardName) {
+  buildCard(cardName, index) {
     const card = document.createElement('div');
-    card.classList.add(['card']);
+    card.classList.add('card');
     card.dataset.name = cardName;
 
     const inner = document.createElement('div');
-    inner.classList.add(['card__inner']);
+    inner.classList.add('card__inner');
 
     const front = document.createElement('div');
-    front.classList.add(['card__inner__front']);
+    front.classList.add('card__inner__front');
 
     const back = document.createElement('div');
-    back.classList.add(['card__inner__back']);
-    back.textContent = cardName;
+    back.classList.add('card__inner__back', `card-back--${index}`);
 
     inner.append(front, back);
     card.appendChild(inner);
