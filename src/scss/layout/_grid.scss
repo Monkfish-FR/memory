@@ -19,12 +19,10 @@
 
   > header {
     grid-area: head;
-    background: #FAB;
   }
 
   > main {
     grid-area: content;
-    background: #FA0;
   }
 
   > footer {
@@ -36,5 +34,7 @@
     grid-template-areas:
       "head content"
       "foot foot";
+
+    grid-template-columns: 1fr 2fr;
   }
 }
