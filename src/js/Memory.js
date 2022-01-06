@@ -1,85 +1,14 @@
 /* eslint-disable global-require */
 /* @see getSpriteWidth() method */
-import sprite from '../assets/images/cards.png';
-
-const CARDS_SAMPLE = [
-  {
-    name: 'apple',
-    index: 0,
-  },
-  {
-    name: 'banana',
-    index: 1,
-  },
-  {
-    name: 'orange',
-    index: 2,
-  },
-  {
-    name: 'lime',
-    index: 3,
-  },
-  {
-    name: 'pomegranate',
-    index: 4,
-  },
-  {
-    name: 'apricot',
-    index: 5,
-  },
-  {
-    name: 'lemon',
-    index: 6,
-  },
-  {
-    name: 'strawberry',
-    index: 7,
-  },
-  {
-    name: 'greenapple',
-    index: 8,
-  },
-  {
-    name: 'peach',
-    index: 9,
-  },
-  {
-    name: 'grape',
-    index: 10,
-  },
-  {
-    name: 'watermelon',
-    index: 11,
-  },
-  {
-    name: 'plum',
-    index: 12,
-  },
-  {
-    name: 'peer',
-    index: 13,
-  },
-  {
-    name: 'cherry',
-    index: 14,
-  },
-  {
-    name: 'raspberry',
-    index: 15,
-  },
-  {
-    name: 'mango',
-    index: 16,
-  },
-  {
-    name: 'yellowcherry',
-    index: 17,
-  },
-];
-
 export default class Memory {
   constructor(options) {
-    const { rows, cols, wrapper } = options;
+    const {
+      rows,
+      cols,
+      cards,
+      sprite,
+      wrapper,
+    } = options;
 
     this.wrapper = wrapper;
     this.board = null;
@@ -89,13 +18,14 @@ export default class Memory {
     this.cols = (rows * cols) % 2 === 0 ? cols : cols - 1;
     this.nbPairs = (this.rows * this.cols) / 2;
 
-    this.cards = [...CARDS_SAMPLE];
+    this.cards = [...cards];
     this.deck = this.setDeck();
-    console.log(94, this.deck);
+    console.log(25, this.deck);
 
     this.firstCard = null;
     this.foundPairs = 0;
 
+    this.sprite = sprite;
     this.spriteWidth = null;
     this.spriteIsLarger = null;
     this.gapBetweenCards = 4; // in px
@@ -119,7 +49,7 @@ export default class Memory {
    * Initialise le jeu
    */
   init() {
-    Memory.getSpriteWidth()
+    this.getSpriteWidth()
       .then((response) => {
         this.spriteWidth = response;
 
@@ -148,12 +78,12 @@ export default class Memory {
    *
    * @returns {Promise}
    */
-  static getSpriteWidth() {
+  getSpriteWidth() {
     const http = require('http');
     const imagesize = require('imagesize');
 
     return new Promise((resolve, reject) => {
-      http.get(sprite, (response) => {
+      http.get(this.sprite, (response) => {
         imagesize(response, (err, { width }) => {
           if (err) reject(err);
 
@@ -273,7 +203,7 @@ export default class Memory {
   createSpriteImg() {
     const img = document.createElement('img');
     img.classList.add('sprite');
-    img.src = sprite;
+    img.src = this.sprite;
     img.alt = '';
 
     if (this.spriteIsLarger) img.classList.add('sprite--wide');
