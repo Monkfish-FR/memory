@@ -1,3 +1,7 @@
+/* eslint-disable global-require */
+/* @see getSpriteWidth() method */
+import sprite from '../assets/images/cards.png';
+
 const CARDS_SAMPLE = [
   {
     name: 'apple',
@@ -87,10 +91,14 @@ export default class Memory {
 
     this.cards = [...CARDS_SAMPLE];
     this.deck = this.setDeck();
-    console.log(34, this.deck);
+    console.log(94, this.deck);
 
     this.firstCard = null;
     this.foundPairs = 0;
+
+    this.spriteWidth = null;
+    this.spriteIsLarger = null;
+    this.gapBetweenCards = 4; // in px
   }
 
   /**
@@ -111,15 +119,48 @@ export default class Memory {
    * Initialise le jeu
    */
   init() {
-    this.board = Memory.buildBoard();
-    const squareWidth = 100 / this.cols;
+    Memory.getSpriteWidth()
+      .then((response) => {
+        this.spriteWidth = response;
 
-    this.deck.forEach(({ name, index }) => {
-      const square = this.buildSquare(squareWidth, name, index);
-      this.board.append(square);
+        this.board = Memory.buildBoard();
+        this.wrapper.appendChild(this.board);
+
+        const cardWidth = this.board.clientWidth / this.cols;
+        const cardInnerWidth = cardWidth - this.gapBetweenCards * 2;
+        this.spriteIsLarger = response && cardInnerWidth < response;
+
+        const squareWidth = 100 / this.cols;
+
+        this.deck.forEach(({ name, index }) => {
+          const square = this.buildSquare(squareWidth, name, index);
+          this.board.append(square);
+        });
+      })
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.error(`[ERROR Memory.init()] ${error}`);
+      });
+  }
+
+  /**
+   * Détermine la largeur de l'image sprite
+   *
+   * @returns {Promise}
+   */
+  static getSpriteWidth() {
+    const http = require('http');
+    const imagesize = require('imagesize');
+
+    return new Promise((resolve, reject) => {
+      http.get(sprite, (response) => {
+        imagesize(response, (err, { width }) => {
+          if (err) reject(err);
+
+          resolve(width);
+        });
+      });
     });
-
-    this.wrapper.appendChild(this.board);
   }
 
   /**
@@ -152,6 +193,7 @@ export default class Memory {
 
     const squareContent = document.createElement('div');
     squareContent.classList.add('game__square__content');
+    squareContent.style.padding = `${this.gapBetweenCards}px`;
 
     const card = this.buildCard(cardName, index);
 
@@ -181,8 +223,16 @@ export default class Memory {
     front.classList.add('card__inner__front');
 
     const back = document.createElement('div');
-    back.classList.add('card__inner__back', `card-back--${index}`);
+    back.classList.add('card__inner__back');
 
+    const backCard = document.createElement('div');
+    backCard.classList.add('card-back', `card-back--${index}`);
+
+    const spacerImg = Memory.createSpacerImg();
+    const spriteImg = this.createSpriteImg();
+
+    backCard.append(spacerImg, spriteImg);
+    back.appendChild(backCard);
     inner.append(front, back);
     card.appendChild(inner);
 
@@ -202,12 +252,41 @@ export default class Memory {
   }
 
   /**
+   * Crée un espaceur
+   *
+   * @returns {HTMLImageElement}
+   */
+  static createSpacerImg() {
+    const img = document.createElement('img');
+    img.classList.add('spacer');
+    img.src = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
+    img.alt = '';
+
+    return img;
+  }
+
+  /**
+   * Crée l'image avec le sprite des cartes
+   *
+   * @returns {HTMLImageElement}
+   */
+  createSpriteImg() {
+    const img = document.createElement('img');
+    img.classList.add('sprite');
+    img.src = sprite;
+    img.alt = '';
+
+    if (this.spriteIsLarger) img.classList.add('sprite--wide');
+
+    return img;
+  }
+
+  /**
    * Sélectionne la carte
    *
    * @param {HTMLDivElement} card La carte sélectionnée
    */
   clickCard(card) {
-    // this.checkVictory(true); // TODO: remove this line
     card.classList.add('card--clicked');
 
     // Si c'est la 1ère carte…
@@ -222,10 +301,12 @@ export default class Memory {
       if (card.dataset.name === this.firstCard.dataset.name) {
         // …la paire est trouvée
         this.foundPairs += 1;
+        // on "réactive" le jeu
+        this.board.classList.remove('disabled');
 
         this.firstCard.classList.replace('card--clicked', 'card--found');
         card.classList.replace('card--clicked', 'card--found');
-
+        // on regarde si c'est gagné
         this.checkVictory();
       } else {
         // …c'est loupé !

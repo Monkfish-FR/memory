@@ -1,5 +1,6 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
 
 module.exports = {
   mode: 'development',
@@ -46,6 +47,7 @@ module.exports = {
   },
   plugins: [
     new MiniCssExtractPlugin(),
+    new NodePolyfillPlugin(),
   ],
   devServer: {
     open: true,

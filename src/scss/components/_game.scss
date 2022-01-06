@@ -9,6 +9,12 @@
 .game {
   width: 80%;
 
+  @media only screen
+  and (max-width: (v.$bp-large - 1))
+  and (orientation: landscape) {
+    width: 66%;
+  }
+
   &__board {
     align-content: center;
     background: v.$light;
@@ -24,11 +30,11 @@
     text-align: center;
 
     &__content {
-      bottom: 4px;
-      left: 4px;
+      bottom: 0;
+      left: 0;
       position: absolute;
-      right: 4px;
-      top: 4px;
+      right: 0;
+      top: 0;
     }
   }
 }
@@ -64,10 +70,8 @@
     }
 
     &__back {
-      align-items: center;
       background: v.$white;
-      display: flex;
-      justify-content: center;
+      overflow: hidden;
       transform: rotateY(180deg) scale(1.1);
     }
   }
@@ -81,15 +85,38 @@
     }
   }
 
-  // &--clicked {
-  //   transform: scale(1.1);
-  // }
-
   &--found {
-    transform: scale(0.9);
+    transform: scale(0.8);
+  }
+}
 
-    .card__inner__back {
-      background: #FAB;
+.card-back {
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+
+  .spacer {
+    height: auto;
+    width: 100%;
+  }
+
+  .sprite {
+    left: 0;
+    min-width: 100%;
+    min-height: 100%;
+    position: absolute;
+    top: 0;
+
+    &.sprite--wide {
+      min-width: none;
+      max-width: 100%;
     }
+  }
+}
+
+@for $i from 1 to v.$number-of-items {
+  .card-back--#{$i} .sprite {
+    top: calc(-1 * (100% * $i));
   }
 }
