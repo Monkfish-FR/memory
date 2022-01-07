@@ -1,6 +1,23 @@
 /* eslint-disable global-require */
 /* @see getSpriteWidth() method */
+
+/**
+ * @class Memory
+ */
 export default class Memory {
+  /**
+   * Crée une nouvelle instance de Memory
+   *
+   * @param {Object} options
+   * @param {Number} options.rows Le nombre de lignes
+   * @param {Number} options.cols Le nombre de colonnes
+   * @param {Object[]} options.cards Le descriptif des cartes
+   * @param {string} options.cards.name Le nom de la carte
+   * @param {Number} options.cards.index L'index de la carte (position dans le sprite)
+   * @param {String} options.sprite L'URL de du sprite
+   * @param {HTMLElement} options.wrapper Le conteneur du jeu
+   * @param {HTMLElement|null} options.timer Le compteur du jeu ; null si pas de compteur
+   */
   constructor(options) {
     const {
       rows,
@@ -12,6 +29,9 @@ export default class Memory {
 
     this.wrapper = wrapper;
     this.board = null;
+
+    this.timer = options.timer || null;
+    this.timerIsLaunched = false;
 
     this.rows = rows;
     // On s'assure que le nombre de cases est pair
@@ -29,6 +49,8 @@ export default class Memory {
     this.spriteWidth = null;
     this.spriteIsLarger = null;
     this.gapBetweenCards = 4; // in px
+
+    if (this.timer) this.setTimerCallback();
   }
 
   /**
@@ -46,6 +68,16 @@ export default class Memory {
   }
 
   /**
+   * Définit la fonction à appeler à la fin du timer
+   */
+  setTimerCallback() {
+    this.timer.cb = () => {
+      const ms = this.timer.pause();
+      Memory.lost(ms);
+    };
+  }
+
+  /**
    * Initialise le jeu
    */
   init() {
@@ -55,6 +87,10 @@ export default class Memory {
 
         this.board = Memory.buildBoard();
         this.wrapper.appendChild(this.board);
+
+        if (this.timer) {
+          this.wrapper.appendChild(this.timer.timer);
+        }
 
         const cardWidth = this.board.clientWidth / this.cols;
         const cardInnerWidth = cardWidth - this.gapBetweenCards * 2;
@@ -217,6 +253,11 @@ export default class Memory {
    * @param {HTMLDivElement} card La carte sélectionnée
    */
   clickCard(card) {
+    if (this.timer && !this.timerIsLaunched) {
+      this.timer.play();
+      this.timerIsLaunched = true;
+    }
+
     card.classList.add('card--clicked');
 
     // Si c'est la 1ère carte…
@@ -262,6 +303,11 @@ export default class Memory {
    */
   checkVictory(force = false) {
     if (force || this.foundPairs === this.nbPairs) {
+      const ms = this.timer.pause();
+
+      const score = document.getElementById('winScore');
+      score.textContent = Memory.getScore(ms);
+
       const modal = document.getElementById('win');
       modal.classList.add('modal--win');
 
@@ -273,6 +319,21 @@ export default class Memory {
         }, 500);
       });
     }
+  }
+
+  static lost(ms) {
+    console.log(325, `LOST in ${Memory.getScore(ms)}`);
+    // @TODO: modal--lost
+  }
+
+  /**
+   * Récupère de score
+   *
+   * @param {Number} ms Le temps en millisecondes
+   * @returns {Number}
+   */
+  static getScore(ms) {
+    return Math.floor(ms / 1000);
   }
 
   /**
