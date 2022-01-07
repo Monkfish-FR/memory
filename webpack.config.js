@@ -1,15 +1,13 @@
 const path = require('path');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
 
 module.exports = {
-  mode: 'development',
-  devtool: 'source-map',
-  context: path.resolve(__dirname, 'src'),
-  // entry: ['./main.js', './scss/main.scss'],
-  entry: './main.js',
+  entry: './src/client/main.js',
   output: {
-    path: path.resolve(__dirname, 'public'),
+    path: path.resolve(process.cwd(), 'dist'),
   },
   optimization: {
     minimize: false,
@@ -48,12 +46,27 @@ module.exports = {
   plugins: [
     new MiniCssExtractPlugin(),
     new NodePolyfillPlugin(),
+    new CleanWebpackPlugin(),
+    new HtmlWebpackPlugin({
+      template: './public/index.html',
+      favicon: './public/favicon.ico',
+    }),
   ],
   devServer: {
     open: true,
-    port: 8080,
+    port: 3000,
     static: {
-      directory: path.join(__dirname, 'public'),
+      directory: path.resolve(process.cwd(), 'dist'),
+    },
+    proxy: {
+      // '/test': {
+      //   target: 'http://localhost:3000',
+      //   router: () => 'http://localhost:8080',
+      // },
+      '/api': {
+        target: 'http://localhost:3000',
+        router: () => 'http://localhost:8080',
+      },
     },
   },
 };

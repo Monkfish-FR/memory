@@ -24,3 +24,16 @@ const memory = new Memory({
   timer,
 });
 memory.init();
+
+/* Teste le server */
+// To run the test, uncomment:
+//   - PROXY 'test' in `webpack.config.js`
+//   - SERVER.js
+// fetch('/test/request')
+//   .then((res) => res.json())
+//   .then((user) => {
+//     console.log(`[TEST SERVER PASSED] Hello ${user.username}`);
+//   })
+//   .catch((err) => {
+//     console.error(`[TEST SERVER FAILED] ${err}`);
+//   });
