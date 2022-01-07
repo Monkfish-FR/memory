@@ -1,7 +1,7 @@
 import sprite from '../assets/images/cards.png';
 
-const GRID_ROWS = 4;
-const GRID_COLS = 7;
+const GRID_ROWS = 2;
+const GRID_COLS = 2;
 const CARDS_DESCRIPTION = [
   {
     name: 'apple',

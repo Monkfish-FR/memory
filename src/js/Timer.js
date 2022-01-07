@@ -34,6 +34,11 @@ export default class Timer {
       ? document.getElementById(this.id)
       : document.createElement('div');
 
+    if (!this.id) {
+      this.id = 'timer';
+      progressBar.id = this.id;
+    }
+
     progressBar.classList.add('timer');
 
     this.animation = this.buildAnimatedElement();
@@ -85,6 +90,17 @@ export default class Timer {
     this.animation.style.animationPlayState = 'paused';
 
     return diff;
+  }
+
+  /**
+   * Relance l'animation du Timer
+   *
+   * @see https://css-tricks.com/restart-css-animation/
+   */
+  refresh() {
+    this.animation.classList.remove('timer__inner');
+    void this.animation.offsetWidth;
+    this.animation.classList.add('timer__inner');
   }
 
   /**

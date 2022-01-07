@@ -42,8 +42,6 @@ export default class Memory {
     this.nbPairs = (this.rows * this.cols) / 2;
 
     this.cards = [...cards];
-    this.deck = this.setDeck();
-    console.log(25, this.deck);
 
     this.firstCard = null;
     this.foundPairs = 0;
@@ -92,19 +90,14 @@ export default class Memory {
         this.wrapper.appendChild(this.board);
 
         if (this.timer) {
-          this.wrapper.appendChild(this.timer.timer);
+          this.addTimer();
         }
 
         const cardWidth = this.board.clientWidth / this.cols;
         const cardInnerWidth = cardWidth - this.gapBetweenCards * 2;
         this.spriteIsLarger = response && cardInnerWidth < response;
 
-        const squareWidth = 100 / this.cols;
-
-        this.deck.forEach(({ name, index }) => {
-          const square = this.buildSquare(squareWidth, name, index);
-          this.board.append(square);
-        });
+        this.play();
       })
       .catch((error) => {
         // eslint-disable-next-line no-console
@@ -143,6 +136,47 @@ export default class Memory {
     board.classList.add('game__board');
 
     return board;
+  }
+
+  /**
+   * Ajoute le timer
+   */
+  addTimer() {
+    this.wrapper.appendChild(this.timer.timer);
+  }
+
+  /**
+   * Recharge le timer
+   */
+  refreshTimer() {
+    if (this.timerIsLaunched) {
+      this.timer.refresh();
+      this.timerIsLaunched = false;
+    }
+  }
+
+  /**
+   * Lance une partie
+   */
+  play() {
+    this.board.textContent = '';
+
+    if (this.timer) {
+      this.refreshTimer();
+    }
+
+    this.firstCard = null;
+    this.foundPairs = 0;
+
+    const deck = this.setDeck();
+    console.log(172, deck);
+
+    const squareWidth = 100 / this.cols;
+
+    deck.forEach(({ name, index }) => {
+      const square = this.buildSquare(squareWidth, name, index);
+      this.board.append(square);
+    });
   }
 
   /**
@@ -316,17 +350,19 @@ export default class Memory {
         `,
         button: 'Voir les meilleurs temps',
       });
+
+      this.play();
     }
   }
 
   lost(ms) {
-    console.log(325, `LOST in ${Memory.getScore(ms)}`);
-
     this.modal.show('error', {
       title: 'Time over!',
       content: 'Oups, le temps est écoulé…',
       button: 'Je recommence',
     });
+
+    this.play();
   }
 
   /**

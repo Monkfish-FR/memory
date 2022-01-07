@@ -23,6 +23,7 @@
         "import/prefer-default-export": "off",
         "no-shadow": "off",
         "no-unused-vars": "off",
-        "func-names": ["error", "as-needed"]
+        "func-names": ["error", "as-needed"],
+        "no-void": ["error", { "allowAsStatement": true }]
     }
 }
