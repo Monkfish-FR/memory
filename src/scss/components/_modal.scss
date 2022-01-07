@@ -48,20 +48,13 @@
     }
   }
 
-  &--win {
+  &--success,
+  &--error {
     transform: scale(1);
     z-index: 10;
 
-    .modal__overlay {
-      background: rgba(v.$success, 0.8);
-    }
-
     .modal__content {
       animation: blowUpModal 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
-
-      h2 {
-        color: v.$success;
-      }
     }
 
     + #app {
@@ -71,6 +64,30 @@
     &.modal--out {
       .modal__content {
         animation: blowUpModalOut 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+      }
+    }
+  }
+
+  &--success {
+    .modal__overlay {
+      background: rgba(v.$success, 0.8);
+    }
+
+    .modal__content {
+      h2 {
+        color: v.$success;
+      }
+    }
+  }
+
+  &--error {
+    .modal__overlay {
+      background: rgba(v.$error, 0.8);
+    }
+
+    .modal__content {
+      h2 {
+        color: v.$error;
       }
     }
   }

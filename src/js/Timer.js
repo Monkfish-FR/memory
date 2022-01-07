@@ -4,7 +4,7 @@
 export default class Timer {
   /**
    * Crée une nouvelle instance de Timer
-   * 
+   *
    * @param {Object} [options]
    * @param {string|null} [options.id] L'ID du conteneur
    * @param {string|null} [options.duration] La durée du compte à rebours (format animation CSS)
@@ -36,7 +36,7 @@ export default class Timer {
 
     progressBar.classList.add('timer');
 
-    this.animation = this.addAnimation();
+    this.animation = this.buildAnimatedElement();
 
     progressBar.appendChild(this.animation);
 
@@ -48,7 +48,7 @@ export default class Timer {
    *
    * @returns {HTMLDivElement}
    */
-  addAnimation() {
+  buildAnimatedElement() {
     const progressBarInner = document.createElement('div');
     progressBarInner.classList.add('timer__inner');
     progressBarInner.style.animationDuration = this.duration;

@@ -1,5 +1,6 @@
 /* eslint-disable global-require */
 /* @see getSpriteWidth() method */
+import Modal from './Modal';
 
 /**
  * @class Memory
@@ -32,6 +33,8 @@ export default class Memory {
 
     this.timer = options.timer || null;
     this.timerIsLaunched = false;
+
+    this.modal = new Modal();
 
     this.rows = rows;
     // On s'assure que le nombre de cases est pair
@@ -73,7 +76,7 @@ export default class Memory {
   setTimerCallback() {
     this.timer.cb = () => {
       const ms = this.timer.pause();
-      Memory.lost(ms);
+      this.lost(ms);
     };
   }
 
@@ -305,25 +308,25 @@ export default class Memory {
     if (force || this.foundPairs === this.nbPairs) {
       const ms = this.timer.pause();
 
-      const score = document.getElementById('winScore');
-      score.textContent = Memory.getScore(ms);
-
-      const modal = document.getElementById('win');
-      modal.classList.add('modal--win');
-
-      modal.addEventListener('click', () => {
-        modal.classList.add('modal--out');
-
-        setTimeout(() => {
-          modal.classList.remove('modal--win', 'modal--out');
-        }, 500);
+      this.modal.show('success', {
+        title: 'You win!',
+        content: `
+          Bravo, ton score est de
+          <strong>${Memory.getScore(ms)}</strong>&nbsp;s
+        `,
+        button: 'Voir les meilleurs temps',
       });
     }
   }
 
-  static lost(ms) {
+  lost(ms) {
     console.log(325, `LOST in ${Memory.getScore(ms)}`);
-    // @TODO: modal--lost
+
+    this.modal.show('error', {
+      title: 'Time over!',
+      content: 'Oups, le temps est écoulé…',
+      button: 'Je recommence',
+    });
   }
 
   /**
@@ -333,7 +336,7 @@ export default class Memory {
    * @returns {Number}
    */
   static getScore(ms) {
-    return Math.floor(ms / 1000);
+    return Number.parseFloat(ms / 1000).toFixed(1); // Format : x.y (en secondes)
   }
 
   /**
