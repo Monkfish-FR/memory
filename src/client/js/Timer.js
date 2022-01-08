@@ -89,7 +89,7 @@ export default class Timer {
 
     this.animation.style.animationPlayState = 'paused';
 
-    return diff;
+    return parseInt(diff, 10);
   }
 
   /**

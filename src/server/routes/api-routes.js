@@ -12,4 +12,7 @@ const router = express.Router();
 // requête GET pour retrouver toutes les scores
 router.get('/scores', apiRoutes.scoresAll);
 
+// requête POST pour ajouter un score
+router.post('/score-add', apiRoutes.scoreAdd);
+
 module.exports = router;

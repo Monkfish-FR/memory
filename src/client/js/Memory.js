@@ -357,7 +357,7 @@ export default class Memory {
         buttonHandle: Memory.emitVictory,
       });
 
-      // this.displayScores();
+      Memory.addScore(ms);
     }
   }
 
@@ -378,6 +378,23 @@ export default class Memory {
     });
 
     this.play();
+  }
+
+  static addScore(score) {
+    fetch('/api/score-add', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ score }),
+    })
+      .then((res) => res.json())
+      .then((response) => {
+        console.log('memory:add:389', response);
+      })
+      .catch((err) => {
+        console.error(`[Error retrieving scores] ${err}`);
+      });
   }
 
   /**
