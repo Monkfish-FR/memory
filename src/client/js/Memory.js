@@ -26,9 +26,11 @@ export default class Memory {
       cards,
       sprite,
       wrapper,
+      scoresWrapper,
     } = options;
 
     this.wrapper = wrapper;
+    this.scoresWrapper = scoresWrapper;
     this.board = null;
 
     this.timer = options.timer || null;
@@ -74,7 +76,7 @@ export default class Memory {
   setTimerCallback() {
     this.timer.cb = () => {
       const ms = this.timer.pause();
-      this.lost(ms);
+      this.lost();
     };
   }
 
@@ -86,7 +88,7 @@ export default class Memory {
       .then((response) => {
         this.spriteWidth = response;
 
-        this.board = Memory.buildBoard();
+        this.board = this.buildBoard();
         this.wrapper.appendChild(this.board);
 
         if (this.timer) {
@@ -130,10 +132,12 @@ export default class Memory {
    *
    * @returns {HTMLDivElement}
    */
-  static buildBoard() {
+  buildBoard() {
     const board = document.createElement('div');
     board.id = 'board';
     board.classList.add('game__board');
+
+    if (this.cols < 4) board.classList.add('game__board--narrow');
 
     return board;
   }
@@ -349,13 +353,22 @@ export default class Memory {
           <strong>${Memory.getScore(ms)}</strong>&nbsp;s
         `,
         button: 'Voir les meilleurs temps',
+        buttonHandle: Memory.emitVictory,
       });
 
-      this.play();
+      // this.displayScores();
     }
   }
 
-  lost(ms) {
+  static emitVictory() {
+    const victoryEvent = new CustomEvent('memory:win');
+    document.dispatchEvent(victoryEvent);
+  }
+
+  /**
+   * Affiche une modale quand c'est perdu
+   */
+  lost() {
     this.modal.show('error', {
       title: 'Time over!',
       content: 'Oups, le temps est écoulé…',
@@ -366,7 +379,43 @@ export default class Memory {
   }
 
   /**
-   * Récupère de score
+   * Affiche les scores
+   */
+  displayScores() {
+    fetch('/api/scores')
+      .then((res) => res.json())
+      .then((scores) => {
+        const parent = this.scoresWrapper.parentNode;
+        const scoresData = this.scoresWrapper.querySelector('#scoresData');
+
+        const scoresList = scores.map(({ score }, index) => (
+          `<tr>
+            <td class="is-narrow">${index + 1}</td>
+            <td>${Memory.getScore(score)}&nbsp;s</td>
+          </tr>`
+        ));
+
+        scoresData.innerHTML = scoresList.join('');
+
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.classList.add('button', 'button--primary');
+        button.textContent = 'Je peux les battre';
+        button.onclick = () => {
+          this.play();
+          parent.classList.remove('main__content--flip');
+        };
+
+        this.scoresWrapper.appendChild(button);
+        parent.classList.add('main__content--flip');
+      })
+      .catch((err) => {
+        console.error(`[Error retrieving scores] ${err}`);
+      });
+  }
+
+  /**
+   * Récupère le score
    *
    * @param {Number} ms Le temps en millisecondes
    * @returns {Number}

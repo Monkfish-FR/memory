@@ -4,26 +4,37 @@ import Timer from './js/Timer';
 
 import './scss/main.scss';
 
-const $game = document.getElementById('game');
-const $headerScroll = document.getElementById('headerScroll');
+const game = document.getElementById('game');
+const scores = document.getElementById('scores');
+const headerScroll = document.getElementById('headerScroll');
 
 /* Défile jusqu'à la div #game  */
-$headerScroll.addEventListener('touchend', () => {
-  $game.scrollIntoView({ behavior: 'smooth' });
+headerScroll.addEventListener('touchend', () => {
+  game.scrollIntoView({ behavior: 'smooth' });
 });
 
 /* Crée le jeu */
-// On crée le compte à rebours
-// null si pas de décompte
+// On crée le compte à rebours ; null si pas de décompte
 // const timer = new Timer();
 const timer = new Timer({ duration: '4s' });
 
 const memory = new Memory({
   ...memorySettings,
-  wrapper: $game,
+  wrapper: game,
+  scoresWrapper: scores,
   timer,
 });
 memory.init();
+
+/* Quand une victoire est détectée */
+document.addEventListener('memory:win', (e) => {
+  // On cache la modale
+  memory.modal.hide();
+  // On affiche les scores
+  setTimeout(() => {
+    memory.displayScores();
+  }, 1000);
+});
 
 /* Teste le server */
 // To run the test, uncomment:

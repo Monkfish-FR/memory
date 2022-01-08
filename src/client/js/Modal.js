@@ -8,9 +8,7 @@ export default class Modal {
   constructor() {
     this.modal = document.getElementById('modal') || Modal.buildModal();
 
-    this
-      .insert()
-      .addEvent();
+    this.insert();
   }
 
   static buildModal() {
@@ -53,18 +51,30 @@ export default class Modal {
     return wrapper;
   }
 
-  static populate({ title, content, button }) {
+  populate({
+    title,
+    content,
+    button,
+    buttonHandle,
+  }) {
     document.getElementById('modalTitle').textContent = title;
     document.getElementById('modalContent').innerHTML = content;
     document.getElementById('modalButton').textContent = button;
+
+    if (buttonHandle) {
+      document.getElementById('modalButton').addEventListener('click', (e) => {
+        e.preventDefault();
+        buttonHandle();
+      });
+    } else {
+      this.addHideEvent();
+    }
   }
 
-  addEvent() {
+  addHideEvent() {
     this.modal.addEventListener('click', () => {
       this.hide();
     });
-
-    return this;
   }
 
   insert() {
@@ -72,12 +82,10 @@ export default class Modal {
     const parent = app.parentNode;
 
     parent.insertBefore(this.modal, app);
-
-    return this;
   }
 
   show(type, data) {
-    Modal.populate(data);
+    this.populate(data);
     this.modal.classList.add(`modal--${type}`);
   }
 

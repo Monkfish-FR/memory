@@ -10,9 +10,12 @@
 
 @use 'layout/grid';
 @use 'layout/header';
+@use 'layout/content';
 @use 'layout/footer';
 
 @use 'components/game';
+@use 'components/scores';
 @use 'components/timer';
 @use 'components/button';
+@use 'components/table';
 @use 'components/modal';

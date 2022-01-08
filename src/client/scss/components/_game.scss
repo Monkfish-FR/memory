@@ -7,7 +7,7 @@
 @use '../abstracts/functions' as fn;
 
 .game {
-  width: 80%;
+  width: 100%;
 
   @media only screen
   and (max-width: (v.$bp-large - 1))
@@ -23,6 +23,11 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    width: 90%;
+
+    &--narrow {
+      width: 50%;
+    }
   }
 
   &__square {
