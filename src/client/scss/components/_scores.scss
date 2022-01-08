@@ -20,7 +20,7 @@
 
   &__table {
     max-height: calc(100% - fn.add-line(4)); // h2.height
-    overflow: scroll;
+    overflow: auto;
   }
 
 }
