@@ -10,9 +10,10 @@ const router = express.Router();
  * “/route-name” est donc traduit en “api/route-name”
  */
 // requête GET pour retrouver toutes les scores
-router.get('/scores', apiRoutes.scoresAll);
+router.get('/scores/all', apiRoutes.scoresAll);
+router.get('/scores/top', apiRoutes.scoresTop);
 
 // requête POST pour ajouter un score
-router.post('/score-add', apiRoutes.scoreAdd);
+router.post('/scores/add', apiRoutes.scoreAdd);
 
 module.exports = router;

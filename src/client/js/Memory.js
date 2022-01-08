@@ -54,6 +54,8 @@ export default class Memory {
     this.spriteIsLarger = null;
     this.gapBetweenCards = 4; // in px
 
+    this.score = null;
+
     if (this.timer) this.setTimerCallback();
   }
 
@@ -357,7 +359,7 @@ export default class Memory {
         buttonHandle: Memory.emitVictory,
       });
 
-      Memory.addScore(ms);
+      this.addScore(ms);
     }
   }
 
@@ -370,6 +372,8 @@ export default class Memory {
    * Affiche une modale quand c'est perdu
    */
   lost() {
+    this.score = null;
+
     this.modal.show('error', {
       title: 'Time over!',
       content: 'Oups, le temps est écoulé…',
@@ -380,8 +384,13 @@ export default class Memory {
     this.play();
   }
 
-  static addScore(score) {
-    fetch('/api/score-add', {
+  /**
+   * Ajoute le score en BDD
+   *
+   * @param {Number} score Le score (en ms)
+   */
+  addScore(score) {
+    fetch('/api/scores/add', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -390,7 +399,10 @@ export default class Memory {
     })
       .then((res) => res.json())
       .then((response) => {
-        console.log('memory:add:389', response);
+        this.score = {
+          id: response.lastID,
+          score,
+        };
       })
       .catch((err) => {
         console.error(`[Error retrieving scores] ${err}`);
@@ -401,18 +413,25 @@ export default class Memory {
    * Affiche les scores
    */
   displayScores() {
-    fetch('/api/scores')
+    fetch('/api/scores/top')
       .then((res) => res.json())
       .then((scores) => {
         const parent = this.scoresWrapper.parentNode;
         const scoresData = this.scoresWrapper.querySelector('#scoresData');
 
-        const scoresList = scores.map(({ score }, index) => (
-          `<tr>
-            <td class="is-narrow">${index + 1}</td>
-            <td>${Memory.getScore(score)}&nbsp;s</td>
-          </tr>`
-        ));
+        const scoresList = scores.map(({ id, score, createdAt }, index) => {
+          const itemClass = id === this.score.id
+            ? 'border-success'
+            : '';
+
+          return `
+            <tr class="${itemClass}">
+              <td class="is-narrow">${index + 1}</td>
+              <td>${Memory.getScore(score)}&nbsp;s</td>
+              <td>${createdAt}</td>
+            </tr>
+          `;
+        });
 
         scoresData.innerHTML = scoresList.join('');
 

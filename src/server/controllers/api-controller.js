@@ -15,7 +15,7 @@ db.tableExists(TABLE_NAME)
         },
         {
           name: 'score',
-          type: 'TEXT',
+          type: 'INTEGER',
           notNull: true,
         },
       ]);
@@ -23,10 +23,26 @@ db.tableExists(TABLE_NAME)
   });
 
 /**
- * Get all scores
- */
+   * Get all scores
+   */
 exports.scoresAll = async (req, res) => {
-  db.all(`SELECT * FROM ${TABLE_NAME}`)
+  db.all(`SELECT * FROM ${TABLE_NAME} ORDER BY score ASC`)
+    .then((rows) => {
+      res.send(rows);
+    })
+    .catch((err) => {
+      console.log('Error: ');
+      console.log(JSON.stringify(err));
+    });
+};
+
+/**
+   * Get the top scores
+   */
+exports.scoresTop = async (req, res) => {
+  const limit = 2;
+
+  db.all(`SELECT * FROM ${TABLE_NAME} ORDER BY score ASC LIMIT ${limit}`)
     .then((rows) => {
       res.send(rows);
     })
