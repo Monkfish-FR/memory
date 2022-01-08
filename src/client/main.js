@@ -17,7 +17,7 @@ headerScroll.addEventListener('touchend', () => {
 // On crée le compte à rebours ; null si pas de décompte
 // const timer = new Timer();
 const timer = new Timer({ duration: '60s' });
-
+// On crée le jeu
 const memory = new Memory({
   ...memorySettings,
   wrapper: game,

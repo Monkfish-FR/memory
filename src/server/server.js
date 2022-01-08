@@ -10,14 +10,20 @@ const apiRouter = require('./routes/api-routes');
 const SERVER_PORT = process.env.PORT || 8080;
 
 const app = express();
+// dossier distant
 app.use(express.static('dist'));
+// active CORS
 app.use(cors());
+// sécurise Express en ajoutant des __headers__
 app.use(helmet());
+// compresse le corps des réponses
 app.use(compression());
+// reconnaît les objets de requête entrants sous forme de chaînes ou de tableaux
 app.use(express.urlencoded({ extended: false }));
+// reconnaît les objets de requête entrants sous forme d'objet JSON
 app.use(express.json());
 
-// Implement routes
+// Met en place les routes
 // app.use('/test', testRouter);
 app.use('/api', apiRouter);
 

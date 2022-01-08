@@ -349,7 +349,7 @@ export default class Memory {
     if (force || this.foundPairs === this.nbPairs) {
       const ms = this.timer.pause();
 
-      this.modal.show('success', {
+      this.modal.success({
         title: 'You win!',
         content: `
           Bravo, ton score est de
@@ -363,6 +363,9 @@ export default class Memory {
     }
   }
 
+  /**
+   * Crée un évènement personnaisé en cas de victoire
+   */
   static emitVictory() {
     const victoryEvent = new CustomEvent('memory:win');
     document.dispatchEvent(victoryEvent);
@@ -374,7 +377,7 @@ export default class Memory {
   lost() {
     this.score = null;
 
-    this.modal.show('error', {
+    this.modal.error({
       title: 'Time over!',
       content: 'Oups, le temps est écoulé…',
       button: 'Je recommence',

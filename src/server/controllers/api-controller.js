@@ -5,6 +5,7 @@ const TABLE_NAME = 'scores';
 
 const db = new AppDAO('db.sqlite');
 
+// Crée la table 'scores' si elle n'existe pas
 db.tableExists(TABLE_NAME)
   .then((response) => {
     if (response.exist === 0) {
@@ -23,8 +24,8 @@ db.tableExists(TABLE_NAME)
   });
 
 /**
-   * Get all scores
-   */
+ * Récupère tous les scores
+ */
 exports.scoresAll = async (req, res) => {
   db.all(`SELECT * FROM ${TABLE_NAME} ORDER BY score ASC`)
     .then((rows) => {
@@ -37,8 +38,8 @@ exports.scoresAll = async (req, res) => {
 };
 
 /**
-   * Get the top scores
-   */
+ * Récupère les meilleurs scores
+ */
 exports.scoresTop = async (req, res) => {
   const limit = 10;
 
@@ -53,7 +54,7 @@ exports.scoresTop = async (req, res) => {
 };
 
 /**
- * Get all scores
+ * Insère un nouveau score en BDD
  */
 exports.scoreAdd = async (req, res) => {
   const { score } = req.body;

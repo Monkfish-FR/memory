@@ -3,7 +3,7 @@ const path = require('path');
 
 class AppDAO {
   /**
-   * Creates an instance of AppDAO
+   * Crée une nouvelle instance de AppDAO
    *
    * @param {String} dbFileName
    */
@@ -18,7 +18,7 @@ class AppDAO {
   }
 
   /**
-   * Retrieves a single row of data
+   * Récupère un résultat en BDD
    *
    * @example
    * const dao = new AppDAO('database.db')
@@ -50,7 +50,7 @@ class AppDAO {
   }
 
   /**
-   * Retrieves many rows of data
+   * Récupère tous les résultats en BDD
    *
    * @example
    * const dao = new AppDAO('database.db')
@@ -86,7 +86,7 @@ class AppDAO {
   }
 
   /**
-   * Runs the SQL query
+   * Exécute une requête
    *
    * @example
    * const dao = new AppDAO('database.db')
@@ -124,7 +124,7 @@ class AppDAO {
   }
 
   /**
-   * Checks if a table exists
+   * Vérifie si une table existe
    *
    * @param {string} name
    * @returns {Promise}
@@ -138,7 +138,7 @@ class AppDAO {
   }
 
   /**
-   * Creates a table
+   * Crée une table
    *
    * @param {string} name
    * @param {Array} fields
@@ -173,7 +173,7 @@ class AppDAO {
   }
 
   /**
-   * Closes the connection
+   * Ferme la connexion
    *
    * @returns {Promise}
    */
@@ -185,7 +185,7 @@ class AppDAO {
   }
 
   /**
-   * Logs the error
+   * Journalise une erreur
    *
    * @param {String} sql
    * @param {Error} err
