@@ -15,6 +15,12 @@
 
     font-family: v.$font-serif;
     font-weight: 700;
-    margin-bottom: fn.add-line(2);
+    height: fn.add-line(4);
   }
+
+  &__table {
+    max-height: calc(100% - fn.add-line(4)); // h2.height
+    overflow: scroll;
+  }
+
 }

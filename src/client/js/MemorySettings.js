@@ -1,6 +1,6 @@
 import sprite from '../assets/images/cards.png';
 
-const GRID_ROWS = 1;
+const GRID_ROWS = 2;
 const GRID_COLS = 2;
 const CARDS_DESCRIPTION = [
   {

@@ -3,15 +3,13 @@
  *
  * Définit le style du jeu
  */
-@use '../abstracts/variables' as v;
-@use '../abstracts/functions' as fn;
+@use "../abstracts/variables" as v;
+@use "../abstracts/functions" as fn;
 
 .game {
   width: 100%;
 
-  @media only screen
-  and (max-width: (v.$bp-large - 1))
-  and (orientation: landscape) {
+  @media only screen and (max-width: (v.$bp-large - 1)) and (orientation: landscape) {
     width: 66%;
   }
 
@@ -49,15 +47,15 @@
   cursor: pointer;
   height: 100%;
   perspective: 1000px;
-  transition: transform ease-in-out .3s .75s;
+  transition: transform ease-in-out 0.1s 0.3s;
   width: 100%;
 
   &__inner {
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     height: 100%;
     pointer-events: none;
     position: relative;
-    transition: transform 0.6s;
+    transition: transform 0.3s;
     transform-style: preserve-3d;
     width: 100%;
 
@@ -77,7 +75,7 @@
     &__back {
       background: v.$white;
       overflow: hidden;
-      transform: rotateY(180deg) scale(1.1);
+      transform: rotateY(180deg);
     }
   }
 

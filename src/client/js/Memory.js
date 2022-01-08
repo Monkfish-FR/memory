@@ -333,7 +333,7 @@ export default class Memory {
 
           first.classList.remove('card--clicked');
           card.classList.remove('card--clicked');
-        }, 1500);
+        }, 500);
       }
 
       this.firstCard = null;

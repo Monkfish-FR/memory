@@ -16,7 +16,7 @@ headerScroll.addEventListener('touchend', () => {
 /* Crée le jeu */
 // On crée le compte à rebours ; null si pas de décompte
 // const timer = new Timer();
-const timer = new Timer({ duration: '4s' });
+const timer = new Timer({ duration: '60s' });
 
 const memory = new Memory({
   ...memorySettings,
@@ -27,6 +27,7 @@ const memory = new Memory({
 memory.init();
 
 /* Quand une victoire est détectée */
+// @see Memory::emitVictory()
 document.addEventListener('memory:win', (e) => {
   // On cache la modale
   memory.modal.hide();
