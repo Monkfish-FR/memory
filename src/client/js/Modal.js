@@ -1,3 +1,5 @@
+import Button from './Button';
+
 /**
  * @class Modal
  */
@@ -41,10 +43,11 @@ export default class Modal {
     const wrapper = document.createElement('div');
     wrapper.classList.add('t-center');
 
-    const button = document.createElement('button');
-    button.id = 'modalButton';
-    button.type = 'button';
-    button.classList.add('button', 'button--primary');
+    const button = Button.button({
+      id: 'modalButton',
+      classNames: ['button', 'button--primary'],
+      content: 'Je peux les battre',
+    });
 
     wrapper.appendChild(button);
 

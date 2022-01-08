@@ -1,5 +1,6 @@
 /* eslint-disable global-require */
 /* @see getSpriteWidth() method */
+import Button from './Button';
 import Modal from './Modal';
 
 /**
@@ -397,16 +398,20 @@ export default class Memory {
 
         scoresData.innerHTML = scoresList.join('');
 
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.classList.add('button', 'button--primary');
-        button.textContent = 'Je peux les battre';
-        button.onclick = () => {
-          this.play();
-          parent.classList.remove('main__content--flip');
-        };
+        if (!document.getElementById('replayGame')) {
+          const button = Button.button({
+            id: 'replayGame',
+            classNames: ['button', 'button--primary'],
+            content: 'Je peux les battre',
+          });
+          button.onclick = () => {
+            this.play();
+            parent.classList.remove('main__content--flip');
+          };
 
-        this.scoresWrapper.appendChild(button);
+          this.scoresWrapper.appendChild(button);
+        }
+
         parent.classList.add('main__content--flip');
       })
       .catch((err) => {
