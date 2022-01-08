@@ -374,6 +374,7 @@ export default class Memory {
       title: 'Time over!',
       content: 'Oups, le temps est écoulé…',
       button: 'Je recommence',
+      buttonHandle: null,
     });
 
     this.play();

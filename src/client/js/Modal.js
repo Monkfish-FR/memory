@@ -68,7 +68,7 @@ export default class Modal {
       document.getElementById('modalButton').addEventListener('click', (e) => {
         e.preventDefault();
         buttonHandle();
-      });
+      }, { once: true });
     } else {
       this.addHideEvent();
     }
