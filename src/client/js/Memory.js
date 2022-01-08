@@ -17,6 +17,7 @@ export default class Memory {
    * @param {string} options.cards.name Le nom de la carte
    * @param {Number} options.cards.index L'index de la carte (position dans le sprite)
    * @param {String} options.sprite L'URL de du sprite
+   * @param {Number} options.scoreToDisplay Le nombre de scores à afficher
    * @param {HTMLElement} options.wrapper Le conteneur du jeu
    * @param {HTMLElement|null} options.timer Le compteur du jeu ; null si pas de compteur
    */
@@ -28,6 +29,7 @@ export default class Memory {
       sprite,
       wrapper,
       scoresWrapper,
+      scoreToDisplay,
     } = options;
 
     this.wrapper = wrapper;
@@ -54,6 +56,7 @@ export default class Memory {
     this.spriteIsLarger = null;
     this.gapBetweenCards = 4; // in px
 
+    this.scoreToDisplay = scoreToDisplay;
     this.score = null;
 
     if (this.timer) this.setTimerCallback();
@@ -416,7 +419,8 @@ export default class Memory {
    * Affiche les scores
    */
   displayScores() {
-    fetch('/api/scores/top')
+    // fetch('/api/scores/top')
+    fetch(`/api/scores/top?limit=${this.scoreToDisplay}`)
       .then((res) => res.json())
       .then((scores) => {
         const parent = this.scoresWrapper.parentNode;

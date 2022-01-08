@@ -77,11 +77,14 @@ const CARDS_DESCRIPTION = [
   },
 ];
 
+const SCORES_DISPLAY_LIMIT = 10;
+
 const memorySettings = {
   rows: GRID_ROWS,
   cols: GRID_COLS,
   cards: [...CARDS_DESCRIPTION],
   sprite,
+  scoreToDisplay: SCORES_DISPLAY_LIMIT,
 };
 
 export default memorySettings;

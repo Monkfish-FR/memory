@@ -41,7 +41,7 @@ exports.scoresAll = async (req, res) => {
  * Récupère les meilleurs scores
  */
 exports.scoresTop = async (req, res) => {
-  const limit = 10;
+  const limit = req.query.limit || 10;
 
   db.all(`SELECT * FROM ${TABLE_NAME} ORDER BY score ASC LIMIT ${limit}`)
     .then((rows) => {
