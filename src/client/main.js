@@ -2,6 +2,8 @@ import memorySettings from './js/MemorySettings';
 import Memory from './js/Memory';
 import Timer from './js/Timer';
 
+import settings from './settings.json';
+
 import './scss/main.scss';
 
 const game = document.getElementById('game');
@@ -16,7 +18,7 @@ headerScroll.addEventListener('touchend', () => {
 /* Crée le jeu */
 // On crée le compte à rebours ; null si pas de décompte
 // const timer = new Timer();
-const timer = new Timer({ duration: '60s' });
+const timer = new Timer({ duration: settings.timer.duration });
 // On crée le jeu
 const memory = new Memory({
   ...memorySettings,
