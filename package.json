@@ -37,6 +37,7 @@
     "eslint-plugin-import": "2.25.2",
     "html-webpack-plugin": "^5.5.0",
     "mini-css-extract-plugin": "^2.4.5",
+    "node-sass-json-importer": "^4.3.0",
     "sass": "^1.45.2",
     "sass-loader": "^12.4.0",
     "style-loader": "^3.3.1",

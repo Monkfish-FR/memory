@@ -10,7 +10,7 @@
   // border: 1px solid v.$light;
   background: v.$light;
   border-radius: 4px;
-  height: fn.add-line(1);
+  min-height: fn.add-line(1);
   margin: fn.add-line(2) auto;
   padding: 2px;
   position: relative;
@@ -18,7 +18,7 @@
 
   &::before {
     border-bottom: 1px solid v.$light;
-    content: '';
+    content: "";
     height: 50%;
     position: absolute;
     top: 0;
@@ -28,7 +28,7 @@
 
   &__inner {
     animation: countdown;
-    animation-duration: 40s; /* La durée est mise à jour par JS */
+    animation-duration: v.$timer-duration; /* La durée peut être écrasée par JS */
     animation-fill-mode: forwards;
     animation-iteration-count: 1;
     animation-play-state: paused;

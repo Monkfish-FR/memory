@@ -1,4 +1,5 @@
 @use "functions" as fn;
+@use "../../settings.json" as j;
 
 // Breakpoints
 $bp-large: 1024px;
@@ -24,8 +25,11 @@ $font-serif: "Playfair Display", Georgia, serif;
 $font-sans: "Source Sans Pro", Arial, sans-serif;
 $font-code: "Source Code Pro", monospace;
 
-// Cards sprite
-$number-of-items: 18;
+// variables fron SETTINGS.JSON
+// The number of cards which compose the sprite
+$number-of-items: map-get($map: j.$cards, $key: 'number');
+// The duration of the timer
+$timer-duration: map-get($map: j.$timer, $key: 'duration');
 
 // Others
 $footer-height: fn.add-line(2);

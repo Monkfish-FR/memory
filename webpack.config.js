@@ -3,6 +3,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
+const jsonImporter = require('node-sass-json-importer');
 
 module.exports = {
   entry: './src/client/main.js',
@@ -24,7 +25,15 @@ module.exports = {
         use: [
           MiniCssExtractPlugin.loader,
           'css-loader',
-          'sass-loader',
+          {
+            loader: 'sass-loader',
+            options: {
+              webpackImporter: false,
+              sassOptions: {
+                importer: jsonImporter(),
+              },
+            },
+          },
         ],
       },
       {
