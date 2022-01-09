@@ -6,7 +6,6 @@ public/main.js
 public/main.css.map
 public/main.js.map
 
-*.sqlite
 *.BAK
 
 .vscode/*
