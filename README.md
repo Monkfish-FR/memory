@@ -59,3 +59,22 @@ Le tableau ci-dessous décrit les variables disponibles dans le fichier `./src/c
 - il doit être __vertical__ : les images sont placées les unes sur les autres en une seule colonne ;
 - les images composant le sprite doivent être __carrées__ ;
 - le fichier __doit se nommer__ `cards.png` et __se trouver__ dans le répertoire `./src/client/assets/images/`
+
+> Remarque : si `rows` est supérieur à `cols`, les valeurs sont inversées.
+
+### Définition de la grille
+
+Les variables `rows`, `cols` et `number`, `description` sont dépendantes pour la génération de la grille :
+- la variable `number` est uniquement utilisée dans le CSS est __doit__ correspondre à la longueur du tableau `description` ;
+- si `rows` * `cols` est impair ou supérieur à `description.length`, la grille est redéfinie et les variables sont écrasées.
+
+Exemples pour un sprite de 18 éléments (`number` = 18, grille max. = 36 cases):
+
+| rows | cols | grille demandée | problème rencontré               | grille générée        |
+|------|------|-----------------|----------------------------------|-----------------------|
+|    3 |    7 | 21 cases        | grille impaire                   | 2 x 11                |
+|    5 |    8 | 40 cases        | grille trop grande               | 6 x 6 **              |
+|    2 |   20 | 40 cases        | grille trop grande               | 2 x 18 **             |
+|    7 |    4 | 28 cases        | grille inversée                  | 4 x 7                 |
+
+** Le recalcul de la grille cherche à rester au plus proche de la valeur initiale de `rows`

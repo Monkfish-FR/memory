@@ -41,12 +41,10 @@ export default class Memory {
 
     this.modal = new Modal();
 
-    this.rows = rows;
-    // On s'assure que le nombre de cases est pair
-    this.cols = (rows * cols) % 2 === 0 ? cols : cols - 1;
-    this.nbPairs = (this.rows * this.cols) / 2;
-
     this.cards = [...cards];
+
+    [this.rows, this.cols] = this.setGrid(rows, cols);
+    this.nbPairs = (this.rows * this.cols) / 2;
 
     this.firstCard = null;
     this.foundPairs = 0;
@@ -60,6 +58,50 @@ export default class Memory {
     this.score = null;
 
     if (this.timer) this.setTimerCallback();
+  }
+
+  /**
+   * Définit la grille
+   *
+   * @param {Number} rows Le nombre de lignes
+   * @param {Number} cols Le nombre de colonnes
+   *
+   * @returns {Number[]}
+   */
+  setGrid(rows, cols) {
+    const maxSquares = this.cards.length * 2;
+
+    const gteRowsFactors = (number) => (
+      [...Array(number + 1).keys()].find((i) => (
+        number % i === 0 && i >= rows
+      ))
+    );
+
+    let fixRows = Math.min(rows, cols);
+    let fixCols = Math.max(rows, cols);
+
+    // Si la grille est trop grande pour le nombre de cartes disponibles,
+    // on reconstruit une grille la plus proche possible
+    if (maxSquares < rows * cols) {
+      // on cherche le facteur de maxSquares le plus proche de rows
+      // [ gte = greater than or equal ]
+      fixRows = gteRowsFactors(maxSquares);
+      // on calcule le nombre de colonnes
+      fixCols = maxSquares / fixRows;
+    } else if ((rows * cols) % 2 !== 0) {
+      // On s'assure que le nombre de cases est pair
+      // on calcule la grille demandée et on ajoute 1 case
+      const request = (rows * cols) + 1;
+      // on cherche le facteur de la grille le plus proche de rows
+      const newRows = gteRowsFactors(request);
+      const newCols = request / newRows;
+
+      // on rappelle la fonction
+      // pour s'assurer que la nouvelle grille à la bonne taille
+      [fixRows, fixCols] = this.setGrid(newRows, newCols);
+    }
+
+    return [fixRows, fixCols];
   }
 
   /**
@@ -143,7 +185,7 @@ export default class Memory {
     board.id = 'board';
     board.classList.add('game__board');
 
-    if (this.cols < 4) board.classList.add('game__board--narrow');
+    if (this.cols < 4 || this.rows > 5) board.classList.add('game__board--narrow');
 
     return board;
   }
