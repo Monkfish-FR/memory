@@ -185,7 +185,7 @@ export default class Memory {
     board.id = 'board';
     board.classList.add('game__board');
 
-    if (this.cols < 4 || this.rows > 5) board.classList.add('game__board--narrow');
+    if (this.cols < 5 || this.rows > 5) board.classList.add('game__board--narrow');
 
     return board;
   }
